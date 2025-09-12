@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.eucread.eucread.users.auth.filter.JwtFilter;
+import com.eucread.eucread.users.auth.filter.UserStatusValidationFilter;
 import com.eucread.eucread.users.auth.handler.CustomLoginFailureHandler;
 import com.eucread.eucread.users.auth.handler.CustomLoginSuccessHandler;
 import com.eucread.eucread.users.auth.service.CustomUserDetailsService;
@@ -37,7 +38,8 @@ public class SecurityConfig {
 		"/api/user/login",
 		"/api/user/register",
 		"/api/user/check-email",
-		"/api/user/check-username"
+		"/api/user/check-username",
+		"/api/user/auth/email"
 	);
 
 	private final CustomUserDetailsService customUserDetailsService;
@@ -50,7 +52,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http, JwtUtil jwtUtil) throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter, UserStatusValidationFilter userStatusValidationFilter) throws Exception {
 		http
 			.csrf(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable);
@@ -70,7 +72,8 @@ public class SecurityConfig {
 			);
 
 		http
-			.addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(userStatusValidationFilter, UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 
 		http

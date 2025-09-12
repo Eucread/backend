@@ -15,6 +15,9 @@ public enum AuthErrorCode implements ErrorCode {
 	AUTH_CODE_EXPIRED("AUTH-004", HttpStatus.NOT_FOUND, "이메일 인증 코드 만료"),
 	AUTH_CODE_INVALID("AUTH-005", HttpStatus.BAD_REQUEST, "이메일 인증 코드 오류"),
 	NO_ADMIN_PERMISSION_EMAIL("AUTH-006", HttpStatus.BAD_REQUEST, "ADMIN 가입 불가 이메일"),
+	DELETED_USER("AUTH-007", HttpStatus.BAD_REQUEST, "탈퇴한 사용자"),
+	BLOCKED_USER("AUTH-008", HttpStatus.BAD_REQUEST, "차단된 사용자"),
+	LOGIN_FAILED("AUTH-009", HttpStatus.BAD_REQUEST, "로그인 인증 실패"),
 
 	;
 

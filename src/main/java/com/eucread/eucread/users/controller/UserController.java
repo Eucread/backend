@@ -2,16 +2,20 @@ package com.eucread.eucread.users.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eucread.eucread.users.dto.request.EditUserInfoReq;
 import com.eucread.eucread.users.dto.request.EmailAuthReq;
 import com.eucread.eucread.users.dto.request.RegisterReq;
 import com.eucread.eucread.users.dto.response.MyInfoRes;
+import com.eucread.eucread.users.exception.UserErrorCode;
 import com.eucread.eucread.users.service.EmailService;
 import com.eucread.eucread.users.service.UserService;
 import com.eucread.eucread.util.response.Response;
@@ -39,18 +43,6 @@ public class UserController {
 	}
 
 	/**
-	 * 이메일 중복확인
-	 * @param email
-	 * @return
-	 */
-	@GetMapping("/check-email")
-	public ResponseEntity<Response<Void>> checkEmail(@RequestParam("email") String email) {
-		userService.checkEmail(email);
-
-		return Response.ok().toResponseEntity();
-	}
-
-	/**
 	 * 닉네임 중복확인
 	 * @param username
 	 * @return
@@ -64,16 +56,22 @@ public class UserController {
 
 	@GetMapping("/auth/email")
 	public ResponseEntity<Response<Void>> sendEmail(@RequestParam("email") String email) {
+
+		userService.checkEmail(email);
 		emailService.sendEmail(email);
 
 		return Response.ok().toResponseEntity();
 	}
 
 	@PostMapping("/auth/email")
-	public ResponseEntity<Response<Void>> authEmail(@RequestBody EmailAuthReq request) {
-		emailService.authEmail(request);
+	public ResponseEntity<Response<String>> authEmail(@RequestBody EmailAuthReq request) {
+		boolean result = emailService.authEmail(request);
 
-		return Response.ok().toResponseEntity();
+		if (!result) {
+			Response.errorResponse(400, "이메일 인증 실패").toResponseEntity();
+		}
+
+		return Response.ok("이메일 인증 성공").toResponseEntity();
 	}
 
 	/**
@@ -85,6 +83,25 @@ public class UserController {
 		MyInfoRes myInfo = userService.getMyInfo();
 
 		return Response.ok(myInfo).toResponseEntity();
+	}
+
+	/**
+	 * 사용자 정보 수정
+	 * @param request
+	 * @return
+	 */
+	@PatchMapping("/info")
+	public ResponseEntity<Response<Void>> editMyInfo(@RequestBody EditUserInfoReq request) {
+		userService.editMyInfo(request);
+
+		return Response.ok().toResponseEntity();
+	}
+
+	@DeleteMapping("/exit")
+	public ResponseEntity<Response<Void>> userExit() {
+		userService.userExit();
+
+		return Response.ok().toResponseEntity();
 	}
 
 }

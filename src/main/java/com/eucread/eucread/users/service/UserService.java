@@ -2,6 +2,8 @@ package com.eucread.eucread.users.service;
 
 import java.util.List;
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.eucread.eucread.admin.component.AdminWhitelist;
 import com.eucread.eucread.exception.BusinessException;
 import com.eucread.eucread.users.auth.exception.AuthErrorCode;
+import com.eucread.eucread.users.dto.request.EditUserInfoReq;
 import com.eucread.eucread.users.dto.request.RegisterReq;
 import com.eucread.eucread.users.dto.response.MyInfoRes;
 import com.eucread.eucread.users.entity.User;
@@ -31,9 +34,17 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final AdminWhitelist adminWhitelist;
 	private final SecurityUtil securityUtil;
+	private final StringRedisTemplate redisTemplate;
 
 	@Transactional
 	public void register(RegisterReq registerReq) {
+
+		String key = "auth:email:" + registerReq.getEmail();
+		String isAuthed = redisTemplate.opsForValue().get(key);
+
+		if (!"true".equals(isAuthed)) {
+			throw new BusinessException(UserErrorCode.DIFFERENT_EMAIL);
+		}
 
 		checkEmail(registerReq.getEmail());
 		checkUserName(registerReq.getUsername());
@@ -67,6 +78,8 @@ public class UserService {
 
 			userRoleRepository.save(userRole);
 		}
+
+		redisTemplate.delete(key);
 	}
 
 	public void checkEmail(String email) {
@@ -92,4 +105,23 @@ public class UserService {
 			.registerDate(currentUser.getCreatedAt().toString().substring(0, 10))
 			.build();
 	}
+
+	@Transactional
+	public void editMyInfo(EditUserInfoReq editUserInfoReq) {
+		User currentUser = securityUtil.getCurrentUser();
+
+		String username = editUserInfoReq.getUsername();
+
+		checkUserName(username);
+
+		currentUser.setUsername(username);
+	}
+
+	@Transactional
+	public void userExit() {
+		User currentUser = securityUtil.getCurrentUser();
+
+		currentUser.userExit();
+	}
+
 }

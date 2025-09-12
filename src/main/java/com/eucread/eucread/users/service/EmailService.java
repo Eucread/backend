@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -11,11 +12,14 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
 import com.eucread.eucread.exception.BusinessException;
 import com.eucread.eucread.users.auth.exception.AuthErrorCode;
 import com.eucread.eucread.users.dto.request.EmailAuthReq;
+import com.eucread.eucread.users.entity.User;
+import com.eucread.eucread.users.repository.UserRepository;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -27,8 +31,9 @@ public class EmailService {
 
 	private final JavaMailSender javaMailSender;
 	private final StringRedisTemplate redisTemplate;
+	private final UserRepository userRepository;
 
-	private static final Duration EMAIL_CODE_TTL = Duration.ofMinutes(30);
+	private static final Duration EMAIL_CODE_TTL = Duration.ofMinutes(10);
 
 	public void sendEmail(String email) {
 
@@ -38,7 +43,7 @@ public class EmailService {
 		ops.set(email, code, EMAIL_CODE_TTL);
 
 		try {
-			ClassPathResource resource = new ClassPathResource("src/main/resource/templates/email-template.html");
+			ClassPathResource resource = new ClassPathResource("templates/email-template.html");
 			String htmlTemplate = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
 
 			String htmlContent = htmlTemplate.replace("{{CODE}}", code);
@@ -48,7 +53,7 @@ public class EmailService {
 
 			helper.setTo(email);
 			helper.setSubject("[Eucread] 이메일 인증 코드");
-			helper.setText(htmlContent, true); // HTML 모드
+			helper.setText(htmlContent, true);
 
 			javaMailSender.send(message);
 
@@ -58,8 +63,8 @@ public class EmailService {
 
 	}
 
-	public void authEmail(EmailAuthReq request) {
-
+	@Transactional
+	public boolean authEmail(EmailAuthReq request) {
 		String email = request.getEmail();
 		String inputCode = request.getCode();
 
@@ -75,6 +80,10 @@ public class EmailService {
 		}
 
 		redisTemplate.delete(email);
+
+		redisTemplate.opsForValue().set("auth:email:" + request.getEmail(), "true", 10, TimeUnit.MINUTES);
+
+		return true;
 	}
 
 	private String generateCode() {

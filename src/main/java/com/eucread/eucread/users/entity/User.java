@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
@@ -32,18 +33,18 @@ public class User extends BaseEntity {
     private String password;
     
     @Column(name = "username")
+    @Setter
     private String username;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private UserStatus status;
 
-    @Column(name = "email_auth")
-    private boolean emailAuth = false;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRole> userRoles = new ArrayList<>();
 
-
+    public void userExit() {
+        this.status = UserStatus.DELETED;
+    }
 
 }

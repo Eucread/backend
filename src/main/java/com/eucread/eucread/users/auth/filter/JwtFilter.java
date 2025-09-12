@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.eucread.eucread.users.auth.CustomUserDetails;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -29,7 +31,8 @@ public class JwtFilter extends OncePerRequestFilter {
 		"/api/user/login",
 		"/api/user/register",
 		"/api/user/check-email",
-		"/api/user/check-username"
+		"/api/user/check-username",
+		"/api/user/auth/email"
 	);
 
 	private final JwtUtil jwtUtil;
