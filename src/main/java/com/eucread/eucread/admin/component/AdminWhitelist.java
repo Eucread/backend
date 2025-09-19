@@ -1,12 +1,16 @@
 package com.eucread.eucread.admin.component;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import com.eucread.eucread.admin.exception.AdminErrorCode;
@@ -17,14 +21,16 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class AdminWhitelist {
 
+	@Value("classpath:admin/whitelist.txt")
+	private Resource whitelistResource;
+
 	private final Set<String> whitelist = new HashSet<>();
 
 	@PostConstruct
 	public void init() {
-		try {
-			Path path = Path.of("src/main/resources/admin/whitelist.txt");
-			List<String> lines = Files.readAllLines(path);
-			for (String line : lines) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(whitelistResource.getInputStream()))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
 				if (!line.isBlank()) {
 					whitelist.add(line.trim().toLowerCase());
 				}

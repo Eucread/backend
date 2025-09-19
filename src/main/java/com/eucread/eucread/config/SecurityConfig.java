@@ -32,7 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private static final List<String> CORS_WHITELIST = List.of(
-		"http://localhost:5173"
+		"http://localhost:5173",
+		"http://localhost:3000"
 	);
 	private static final List<String> WHITELIST = List.of(
 		"/api/user/login",
@@ -82,6 +83,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/auth/creator/**").hasAnyRole("CREATOR", "ADMIN")
 				.requestMatchers("/api/auth/reader/**").hasAnyRole("READER", "ADMIN")
 				.requestMatchers("/api/auth/translator/**").hasAnyRole("TRANSLATOR", "ADMIN")
+				.requestMatchers("/api/auth/user/**").hasAnyRole("CREATOR", "READER", "TRANSLATOR", "ADMIN")
 				.requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
 				.anyRequest().authenticated()
 			);

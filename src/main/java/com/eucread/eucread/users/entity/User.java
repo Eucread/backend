@@ -3,6 +3,8 @@ package com.eucread.eucread.users.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.eucread.eucread.profile.creator.entity.CreatorProfile;
+import com.eucread.eucread.profile.translator.entity.TranslatorProfile;
 import com.eucread.eucread.users.enums.UserStatus;
 import com.eucread.eucread.util.BaseEntity;
 
@@ -42,6 +44,12 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRole> userRoles = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private CreatorProfile creatorProfile;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private TranslatorProfile translatorProfile;
 
     public void userExit() {
         this.status = UserStatus.DELETED;

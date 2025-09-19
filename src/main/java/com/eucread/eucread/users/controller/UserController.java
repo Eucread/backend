@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class UserController {
 
 	private final UserService userService;
@@ -35,7 +35,7 @@ public class UserController {
 	 * @param registerReq
 	 * @return
 	 */
-	@PostMapping("/register")
+	@PostMapping("/user/register")
 	public ResponseEntity<Response<Void>> register(@Validated @RequestBody RegisterReq registerReq) {
 		userService.register(registerReq);
 
@@ -47,14 +47,14 @@ public class UserController {
 	 * @param username
 	 * @return
 	 */
-	@GetMapping("/check-username")
+	@GetMapping("/user/check-username")
 	public ResponseEntity<Response<Void>> checkUsername(@RequestParam("username") String username) {
 		userService.checkUserName(username);
 
 		return Response.ok().toResponseEntity();
 	}
 
-	@GetMapping("/auth/email")
+	@GetMapping("/user/auth/email")
 	public ResponseEntity<Response<Void>> sendEmail(@RequestParam("email") String email) {
 
 		userService.checkEmail(email);
@@ -63,7 +63,7 @@ public class UserController {
 		return Response.ok().toResponseEntity();
 	}
 
-	@PostMapping("/auth/email")
+	@PostMapping("/user/auth/email")
 	public ResponseEntity<Response<String>> authEmail(@RequestBody EmailAuthReq request) {
 		boolean result = emailService.authEmail(request);
 
@@ -78,7 +78,7 @@ public class UserController {
 	 * 사용자 정보 조회
 	 * @return
 	 */
-	@GetMapping("/info")
+	@GetMapping("/auth/user/info")
 	public ResponseEntity<Response<MyInfoRes>> getMyInfo() {
 		MyInfoRes myInfo = userService.getMyInfo();
 
@@ -90,14 +90,14 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@PatchMapping("/info")
+	@PatchMapping("/auth/user/info")
 	public ResponseEntity<Response<Void>> editMyInfo(@RequestBody EditUserInfoReq request) {
 		userService.editMyInfo(request);
 
 		return Response.ok().toResponseEntity();
 	}
 
-	@DeleteMapping("/exit")
+	@DeleteMapping("/auth/user/exit")
 	public ResponseEntity<Response<Void>> userExit() {
 		userService.userExit();
 

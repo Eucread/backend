@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.eucread.eucread.admin.component.AdminWhitelist;
 import com.eucread.eucread.exception.BusinessException;
+import com.eucread.eucread.profile.creator.service.CreatorService;
+import com.eucread.eucread.profile.translator.service.TranslatorService;
 import com.eucread.eucread.users.auth.exception.AuthErrorCode;
 import com.eucread.eucread.users.dto.request.EditUserInfoReq;
 import com.eucread.eucread.users.dto.request.RegisterReq;
@@ -29,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
+	private final CreatorService creatorService;
+	private final TranslatorService translatorService;
 	private final UserRepository userRepository;
 	private final UserRoleRepository userRoleRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -80,6 +84,14 @@ public class UserService {
 		}
 
 		redisTemplate.delete(key);
+
+		if (roles.contains(Role.CREATOR)) {
+			creatorService.createCreatorProfile(savedUser);
+		}
+
+		if (roles.contains(Role.TRANSLATOR)) {
+			translatorService.createTranslatorProfile(savedUser);
+		}
 	}
 
 	public void checkEmail(String email) {
