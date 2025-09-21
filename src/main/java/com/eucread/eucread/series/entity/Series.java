@@ -55,6 +55,6 @@ public class Series extends BaseEntity {
 	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SeriesCreator> seriesCreators = new ArrayList<>();
 
-	@OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Episode> episodes = new ArrayList<>();
 }
