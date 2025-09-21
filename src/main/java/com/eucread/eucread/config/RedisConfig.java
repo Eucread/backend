@@ -10,11 +10,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-	@Bean
-	public RedisConnectionFactory redisConnectionFactory() {
-		return new LettuceConnectionFactory();
-	}
-
 	// RedisTemplate (String 키 + String 값)
 	@Bean
 	public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory connectionFactory) {
