@@ -3,6 +3,7 @@ package com.eucread.eucread.series.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.eucread.eucread.episode.entity.Episode;
 import com.eucread.eucread.series.enums.SeriesStatus;
 import com.eucread.eucread.util.BaseEntity;
 
@@ -54,5 +55,6 @@ public class Series extends BaseEntity {
 	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SeriesCreator> seriesCreators = new ArrayList<>();
 
-
+	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Episode> episodes = new ArrayList<>();
 }
