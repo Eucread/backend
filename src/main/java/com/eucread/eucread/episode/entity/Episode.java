@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Getter
@@ -37,7 +38,7 @@ public class Episode {
     private LocalDateTime scheduledAt;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private EpisodeStatus status;
 
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
@@ -50,4 +51,7 @@ public class Episode {
 
     @Column(name = "average_star", columnDefinition = "DOUBLE")
     private Double averageStar;
+
+    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Page> pages = new ArrayList<>();
 }

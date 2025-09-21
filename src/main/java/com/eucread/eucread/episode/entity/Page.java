@@ -1,18 +1,22 @@
 package com.eucread.eucread.episode.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "page")
 public class Page {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "page_id")
     private Long pageId;
-
-    @Column(name = "episode_id", nullable = false)
-    private Long episodeId;
 
     @Column(name = "page_no", nullable = false)
     private Long pageNo;
@@ -20,11 +24,11 @@ public class Page {
     @Column(name = "storage_key", nullable = false)
     private String storageKey;
 
-    @Column(name = "width", nullable = false)
-    private Integer width;
+    @Column(name = "width", nullable = false, columnDefinition = "DOUBLE")
+    private Double width;
 
-    @Column(name = "height", nullable = false)
-    private Integer height;
+    @Column(name = "height", nullable = false, columnDefinition = "DOUBLE")
+    private Double height;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "episode_id")

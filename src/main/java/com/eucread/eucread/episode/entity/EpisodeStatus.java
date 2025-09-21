@@ -1,5 +1,5 @@
 package com.eucread.eucread.episode.entity;
 
-public enum Status {
+public enum EpisodeStatus {
     DRAFT, REVIEWING, REJECTED, PUBLISHED, PAUSED
 }
