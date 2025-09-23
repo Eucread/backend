@@ -1,4 +1,4 @@
-package com.eucread.eucread.series.entity;
+package com.eucread.eucread.comic.series.entity;
 
 import com.eucread.eucread.profile.creator.entity.CreatorProfile;
 

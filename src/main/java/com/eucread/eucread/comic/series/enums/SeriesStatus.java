@@ -1,4 +1,4 @@
-package com.eucread.eucread.series.enums;
+package com.eucread.eucread.comic.series.enums;
 
 import lombok.Getter;
 

@@ -1,10 +1,10 @@
-package com.eucread.eucread.series.entity;
+package com.eucread.eucread.comic.series.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.eucread.eucread.episode.entity.Episode;
-import com.eucread.eucread.series.enums.SeriesStatus;
+import com.eucread.eucread.comic.episode.entity.Episode;
+import com.eucread.eucread.comic.series.enums.SeriesStatus;
 import com.eucread.eucread.util.BaseEntity;
 
 import jakarta.persistence.CascadeType;

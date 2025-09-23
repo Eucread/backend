@@ -3,7 +3,7 @@ package com.eucread.eucread.profile.creator.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.eucread.eucread.series.entity.SeriesCreator;
+import com.eucread.eucread.comic.series.entity.SeriesCreator;
 import com.eucread.eucread.users.entity.User;
 import com.eucread.eucread.util.BaseEntity;
 

@@ -1,4 +1,6 @@
-package com.eucread.eucread.episode.entity;
+package com.eucread.eucread.comic.page.entity;
+
+import com.eucread.eucread.comic.episode.entity.Episode;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

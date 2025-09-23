@@ -1,6 +1,8 @@
-package com.eucread.eucread.episode.entity;
+package com.eucread.eucread.comic.episode.entity;
 
-import com.eucread.eucread.series.entity.Series;
+import com.eucread.eucread.comic.episode.enums.EpisodeStatus;
+import com.eucread.eucread.comic.page.entity.Page;
+import com.eucread.eucread.comic.series.entity.Series;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
