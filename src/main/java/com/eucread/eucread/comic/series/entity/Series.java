@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.eucread.eucread.comic.episode.entity.Episode;
+import com.eucread.eucread.comic.series.dto.SeriesCreateRequestDto;
 import com.eucread.eucread.comic.series.enums.SeriesStatus;
 import com.eucread.eucread.util.BaseEntity;
 
@@ -57,4 +58,16 @@ public class Series extends BaseEntity {
 
 	@OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Episode> episodes = new ArrayList<>();
+
+
+	public void update(SeriesCreateRequestDto seriesCreateRequestDto) {
+		this.title = seriesCreateRequestDto.getTitle();
+		this.genre = seriesCreateRequestDto.getGenre();
+		this.thumbnail = seriesCreateRequestDto.getThumbnail();
+		this.introduction = seriesCreateRequestDto.getIntroduction();
+	}
+
+	public void updateStatus(SeriesStatus seriesStatus) {
+		this.status = seriesStatus;
+	}
 }
