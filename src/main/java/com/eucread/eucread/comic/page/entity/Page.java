@@ -2,19 +2,18 @@ package com.eucread.eucread.comic.page.entity;
 
 import com.eucread.eucread.comic.episode.entity.Episode;
 
+import com.eucread.eucread.util.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Table(name = "page")
-public class Page {
+public class Page<S extends BaseEntity> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "page_id")

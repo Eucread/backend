@@ -3,17 +3,16 @@ package com.eucread.eucread.comic.episode.entity;
 import com.eucread.eucread.comic.episode.enums.EpisodeStatus;
 import com.eucread.eucread.comic.page.entity.Page;
 import com.eucread.eucread.comic.series.entity.Series;
+import com.eucread.eucread.util.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -55,5 +54,7 @@ public class Episode {
     private Double averageStar;
 
     @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Page> pages = new ArrayList<>();
+    private List<Page<BaseEntity>> pages = new ArrayList<>();
+
+
 }
